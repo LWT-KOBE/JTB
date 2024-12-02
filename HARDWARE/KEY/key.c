@@ -24,80 +24,21 @@ void KEY_Init(void) //IO初始化
 ////////////////////////////IN//////////////////////////////////
 	
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;// KEY1
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA,&GPIO_InitStructure);	
-	GPIO_SetBits(GPIOA,GPIO_Pin_12);//
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;// KEY2
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOC,&GPIO_InitStructure);
-	GPIO_SetBits(GPIOC,GPIO_Pin_13);//
 
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;// KEY3
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA,&GPIO_InitStructure);
-	GPIO_SetBits(GPIOA,GPIO_Pin_11);//
-
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;// KEY4
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOC,&GPIO_InitStructure);
-	GPIO_SetBits(GPIOC,GPIO_Pin_14);//
 
-	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;// KEY5
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA,&GPIO_InitStructure);
-	GPIO_SetBits(GPIOA,GPIO_Pin_8);//
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4; // KEY6
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA,&GPIO_InitStructure);
-	GPIO_SetBits(GPIOA,GPIO_Pin_4);//
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;// KEY7
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOB,&GPIO_InitStructure);
-	GPIO_SetBits(GPIOB,GPIO_Pin_15);//
-	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;// KEY8
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;//	急停按键
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOA,&GPIO_InitStructure);
 	GPIO_SetBits(GPIOA,GPIO_Pin_5);//
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;// KEY9
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOB,&GPIO_InitStructure);
-	GPIO_SetBits(GPIOB,GPIO_Pin_14);//
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;// KEY10
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;//	拨码开关
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOA,&GPIO_InitStructure);
-	GPIO_SetBits(GPIOA,GPIO_Pin_6);//
-	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;//	KEY11
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOB,&GPIO_InitStructure);
-	GPIO_SetBits(GPIOB,GPIO_Pin_13);//
-
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;//	KEY12
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(GPIOA,&GPIO_InitStructure);
-	GPIO_SetBits(GPIOA,GPIO_Pin_7);//
+	GPIO_SetBits(GPIOA,GPIO_Pin_1);//
 			
 ////////////////////////////OUT//////////////////////////////////	
 	
@@ -126,13 +67,26 @@ void KEY_Init(void) //IO初始化
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
-	GPIO_SetBits(GPIOB,GPIO_Pin_8); 
-	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;//
+	GPIO_SetBits(GPIOB,GPIO_Pin_8);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14;//
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(GPIOB, &GPIO_InitStructure);
-	GPIO_ResetBits(GPIOB,GPIO_Pin_9); 
+	GPIO_SetBits(GPIOB,GPIO_Pin_14);
+	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;//WIFI_WAKE
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_ResetBits(GPIOB,GPIO_Pin_15); 
+	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;// WIFI_RST
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOA,&GPIO_InitStructure);
+	GPIO_SetBits(GPIOA,GPIO_Pin_12);//
+	
 	//GPIO_SetBits(GPIOB,GPIO_Pin_9); 
 
 
@@ -283,23 +237,13 @@ u8 KEY_Scan(u8 mode)
 //		if(KEY12==0)return 12; 
 //	}else if(KEY1==1 && KEY2==1 && KEY3==1 && KEY4==1 && KEY5==1 && KEY6==1 && KEY7==1 && KEY8==1 && KEY9==1 && KEY10==1 && KEY11==1 && KEY12==1)key_up=1; 
 	
-	if(key_up&&(KEY1==1 || KEY2 == 1 || KEY3 == 1 || KEY4 == 1 || KEY5 == 1 || KEY6 == 1 || KEY7 == 1 || KEY8 == 1 || KEY9 == 1 || KEY10 == 1 || KEY11 == 1 || KEY12 == 1))
+	if(key_up&&(KEY1==0))
 	{
 		delay_ms(10);//去抖动 
 		key_up=0;
-		if(KEY1==1)return 1; 
-		if(KEY2==1)return 2; 
-		if(KEY3==1)return 3; 
-		if(KEY4==1)return 4; 
-		if(KEY5==1)return 5; 
-		if(KEY6==1)return 6; 
-		if(KEY7==1)return 7; 
-		if(KEY8==1)return 8; 
-		if(KEY9==1)return 9; 
-		if(KEY10==1)return 10; 
-		if(KEY11==1)return 11; 
-		if(KEY12==1)return 12; 
-	}else if(KEY1==0 && KEY2==0 && KEY3==0 && KEY4==0 && KEY5==0 && KEY6==0 && KEY7==0 && KEY8==0 && KEY9==0 && KEY10==0 && KEY11==0 && KEY12==0)key_up=1; 
+		if(KEY1==0)return 1; 
+		
+	}else if(KEY1==1)key_up=1; 
 	
 	
  	return 0;// 无按键按下

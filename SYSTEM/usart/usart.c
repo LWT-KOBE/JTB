@@ -4,6 +4,7 @@
 #include "stm32f10x_it.h" 
 #include "app.h"
 #include "exti.h"
+#include "task.h"
 ////////////////////////////////////////////////////////////////////////////////// 	 
 //如果使用ucos,则包括下面的头文件即可.
 #if SYSTEM_SUPPORT_OS
@@ -319,7 +320,9 @@ void uart2_init(u32 bound)
    //串口中断配置
    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0);
    NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;//允许USART2中断
-   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;//中断等级
+   //NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;//中断等级
+   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3 ;//抢占优先级3
+   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
    NVIC_Init(&NVIC_InitStructure);                
 }
@@ -419,10 +422,31 @@ void DMA1_Channel7_IRQHandler(void)
     }
 }
 
-u8 Res;
+
+//串口2接收处理函数
+void Serial2Data(uint8_t ucData){
+	static unsigned char ucRxBuffer[250];
+	static unsigned char ucRxCnt = 0;	
+	ucRxBuffer[ucRxCnt++]=ucData;	//将收到的数据存入缓冲区中
+	if (ucRxBuffer[0]!=0xaa && ucRxBuffer[1] != 0x55) //数据头不对，则重新开始寻找0xaa 0x55数据头
+	{
+		ucRxCnt=0;
+		PBout(14) = 1;
+		return;
+	}
+	if (ucRxCnt<5) {return;}//数据不满5个，则返回
+	else
+	{
+		PBout(14) = 0;
+		ucRxCnt=0;//清空缓存区
+	}
+	
+}
+
 
 void USART2_IRQHandler(void)
 {
+	u8 Res;
 //    if(USART_GetITStatus(USART2, USART_IT_IDLE) != RESET) 
 //    { 
 //			DMA_Cmd(DMA1_Channel6,DISABLE);
@@ -450,6 +474,7 @@ void USART2_IRQHandler(void)
 	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET) //Check if data is received //判断是否接收到数据
 	{
 		Res = USART_ReceiveData(USART2);	//读取接收到的数据
+		Serial2Data(Res);
 		USART_SendData(USART1,Res);
 		if((USART_RX_STA&0x8000)==0)//接收未完成
 			{

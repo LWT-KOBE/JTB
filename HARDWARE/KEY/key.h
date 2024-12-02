@@ -19,7 +19,7 @@
 #define GLed PBout(12)   	
 #define RLed PBout(13) 
 
-#define KEY1 PAin(12) 
+#define KEY1 PAin(5) 
 #define KEY2 PCin(13) 
 #define KEY3 PAin(11) 
 #define KEY4 PCin(14) 

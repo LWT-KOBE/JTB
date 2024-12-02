@@ -31,8 +31,8 @@ void time2_init(u16 arr,u16 psc)//
 	TIM_Cmd(TIM2,ENABLE);//Ê§ÄÜ
 	
 	NVIC_InitStrct.NVIC_IRQChannel=TIM2_IRQn;
-	NVIC_InitStrct.NVIC_IRQChannelPreemptionPriority=1;
-	NVIC_InitStrct.NVIC_IRQChannelSubPriority=2;
+	NVIC_InitStrct.NVIC_IRQChannelPreemptionPriority=2;
+	NVIC_InitStrct.NVIC_IRQChannelSubPriority=3;
 	NVIC_InitStrct.NVIC_IRQChannelCmd=ENABLE;
 	
 	NVIC_Init(&NVIC_InitStrct);	
